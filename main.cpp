@@ -4,6 +4,7 @@
 #include <queue>
 #include <vector>
 #include <bitset>
+#include <string>
 
 using namespace std;
 
@@ -41,7 +42,7 @@ void buildCodes(HuffmanNode* root, string code, unordered_map<char, string>& cod
 // Кодирование файла с использованием таблицы кодов Хаффмана
 void encodeFile(const string& inputFile, const string& outputFile) {
     ifstream inFile(inputFile, ios::binary);
-    if (!inFile) {
+    if (!inFile.is_open()) {
         cerr << "Unable to open input file\n";
         return;
     }
@@ -116,7 +117,7 @@ void decodeFile(const string& inputFile, const string& outputFile) {
     char ch;
     while (inFile.get(ch) && ch != '_') {
         inFile.get(ch); // Пропускаем '\n'
-        inFile.getline(line);
+        getline(inFile, line); 
         reverseCodes[line] = ch;
     }
 
@@ -141,10 +142,12 @@ void decodeFile(const string& inputFile, const string& outputFile) {
     outFile.close();
 }
 
-int main() {
-    const string inputFile = "input.txt"; // Имя входного файла
-    const string encodedFile = "encoded.bin"; // Имя файла для записи закодированных данных
-    const string decodedFile = "decoded.txt"; // Имя файла для записи раскодированных данных
+int main(int argc, char *argv[]) {
+    if (argc == 2)
+    {
+    const string inputFile = argv[0];
+    const string encodedFile = "encoded.bin";
+    const string decodedFile = "decoded.txt";
 
     // Кодирование файла
     encodeFile(inputFile, encodedFile);
@@ -153,6 +156,6 @@ int main() {
     decodeFile(encodedFile, decodedFile);
 
     cout << "Encoding and decoding done successfully.\n";
-
+    }
     return 0;
 }
